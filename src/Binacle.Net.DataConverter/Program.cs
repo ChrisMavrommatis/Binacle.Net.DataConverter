@@ -7,7 +7,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        var app = CoconaLiteApp.Create(); // is a shorthand for `CoconaApp.CreateBuilder().Build()`
+        var app = CoconaLiteApp.Create(); 
 
         app.AddCommand(ORLibraryThPackCommand.Name, ORLibraryThPackCommand.Command);
 
