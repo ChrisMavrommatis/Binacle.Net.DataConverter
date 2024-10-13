@@ -17,7 +17,10 @@ internal class ORLibraryThPackCommand
         var hasNextLine = true;
 
         // Get the filename without extension as the name prefix for the test cases
-        var name = input.Split('.', StringSplitOptions.RemoveEmptyEntries)[0].TrimStart('/');
+
+        // Get FileName from input
+        var name = Path.GetFileNameWithoutExtension(input);
+
         var scenarios = new List<Models.Scenario>();
         var linesRead = 0;
 
@@ -47,17 +50,17 @@ internal class ORLibraryThPackCommand
 
             // First line in problem is
             // The problem number and a seed number used in a paper, see documentation.
-            var firstLineParts = problemFirstLine.Split(' ');
+            var firstLineParts = problemFirstLine!.Trim().Split(' ');
 
             // Second line is
             // Container length, width and height
-            string[] containerParts = reader.ReadLine().Split(' ');
+            string[] containerParts = reader.ReadLine()!.Trim().Split(' ');
 
             // Third line indicates the number of box types
-            int boxTypeCount = Convert.ToInt32(reader.ReadLine());
+            int boxTypeCount = Convert.ToInt32(reader.ReadLine()!.Trim());
 
             var items = new List<string>();
-
+            var totalItemsVolume = 0;
             for (int i = 0; i < boxTypeCount; i++)
             {
                 // Each line for a box type is
@@ -70,11 +73,13 @@ internal class ORLibraryThPackCommand
                 // 0/1 indicator is used to indicate wether placement in the vertical orientation is permissible (=1) or not (=0)
                 // Binacle.Net does not use this information
 
-                string[] itemArray = reader.ReadLine().Split(' ');
+                string[] itemArray = reader.ReadLine()!.Trim().Split(' ');
                 var length = itemArray[1];
                 var width = itemArray[3];
                 var height = itemArray[5];
                 var quantity = itemArray[7];
+                var itemVolume = Convert.ToInt32(length) * Convert.ToInt32(width) * Convert.ToInt32(height) * Convert.ToInt32(quantity);
+                totalItemsVolume += itemVolume;
                 items.Add($"{length}x{width}x{height}-{quantity}");
             }
 
@@ -86,6 +91,10 @@ internal class ORLibraryThPackCommand
                 Items = items.ToArray()
             };
 
+            var containerVolume = Convert.ToInt32(containerParts[0]) * Convert.ToInt32(containerParts[1]) * Convert.ToInt32(containerParts[2]);
+            var percentage = (decimal)totalItemsVolume / (decimal)containerVolume;
+            Console.WriteLine("Problem {0}: {1}/{2} = {3}", firstLineParts[0], totalItemsVolume, containerVolume, percentage);
+
             scenarios.Add(scenario);
         }
         var json = JsonConvert.SerializeObject(scenarios, Formatting.Indented);
@@ -94,5 +103,7 @@ internal class ORLibraryThPackCommand
         using var writer = new System.IO.StreamWriter(output);
 
         writer.Write(json);
+
+        Console.WriteLine("Total number of problems converted: {0}", scenarios.Count);
     }
 }

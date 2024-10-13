@@ -2,8 +2,8 @@
 
 internal sealed class Scenario
 {
-    public string Name { get; set; }
-    public string Bin { get; set; }
-    public string Result { get; set; }
-    public string[] Items { get; set; }
+    public required string Name { get; set; }
+    public required string Bin { get; set; }
+    public required string Result { get; set; }
+    public required string[] Items { get; set; }
 }
