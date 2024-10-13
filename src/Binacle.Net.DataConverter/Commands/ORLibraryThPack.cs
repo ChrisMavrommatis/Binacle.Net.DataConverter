@@ -57,6 +57,7 @@ internal class ORLibraryThPackCommand
 
             var items = new List<string>();
             long totalItemsVolume = 0;
+            long totalItemsCount = 0;
             for (int i = 0; i < boxTypeCount; i++)
             {
                 // Each line for a box type is
@@ -73,9 +74,10 @@ internal class ORLibraryThPackCommand
                 var length = itemArray[1];
                 var width = itemArray[3];
                 var height = itemArray[5];
-                var quantity = itemArray[7];
-                var itemVolume = Convert.ToInt64(length) * Convert.ToInt64(width) * Convert.ToInt64(height) * Convert.ToInt64(quantity);
+                var quantity = Convert.ToInt64(itemArray[7]);
+                var itemVolume = Convert.ToInt64(length) * Convert.ToInt64(width) * Convert.ToInt64(height) * quantity;
                 totalItemsVolume += itemVolume;
+                totalItemsCount += quantity;
                 items.Add($"{length}x{width}x{height}-{quantity}");
             }
 
@@ -85,7 +87,7 @@ internal class ORLibraryThPackCommand
             {
                 Name = $"OrLibrary_{name}_{firstLineParts[0]}",
                 Bin = $"Raw::{containerParts[0]}x{containerParts[1]}x{containerParts[2]}",
-                Result = $"PackingEfficiency::{totalItemsVolume} {containerVolume} {items.Count}",
+                Result = $"PackingEfficiency::{totalItemsVolume} {containerVolume} {totalItemsCount}",
                 Items = items.ToArray()
             };
 
