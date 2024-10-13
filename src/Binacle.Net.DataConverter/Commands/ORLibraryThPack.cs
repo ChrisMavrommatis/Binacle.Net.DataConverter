@@ -22,10 +22,8 @@ internal class ORLibraryThPackCommand
         var name = Path.GetFileNameWithoutExtension(input);
 
         var scenarios = new List<Models.Scenario>();
-        var linesRead = 0;
 
         var firstLine = reader.ReadLine();
-        linesRead++;
 
         var noOfProblemsInFile = Convert.ToInt32(firstLine);
 
@@ -37,8 +35,6 @@ internal class ORLibraryThPackCommand
                 hasNextLine = false;
                 break;
             }
-
-            linesRead++;
 
             // Problem format is as follows
             // 1 2502505
@@ -83,15 +79,16 @@ internal class ORLibraryThPackCommand
                 items.Add($"{length}x{width}x{height}-{quantity}");
             }
 
+            var containerVolume = Convert.ToInt64(containerParts[0]) * Convert.ToInt64(containerParts[1]) * Convert.ToInt64(containerParts[2]);
+
             var scenario = new Models.Scenario
             {
                 Name = $"OrLibrary_{name}_{firstLineParts[0]}",
                 Bin = $"Raw::{containerParts[0]}x{containerParts[1]}x{containerParts[2]}",
-                Result = $"PackingEfficiency::_",
+                Result = $"PackingEfficiency::{totalItemsVolume} {containerVolume} {items.Count}",
                 Items = items.ToArray()
             };
 
-            var containerVolume = Convert.ToInt64(containerParts[0]) * Convert.ToInt64(containerParts[1]) * Convert.ToInt64(containerParts[2]);
             var percentage = (decimal)totalItemsVolume / (decimal)containerVolume;
             Console.WriteLine("Problem {0}: {1}/{2} = {3}", firstLineParts[0], totalItemsVolume, containerVolume, percentage);
 
