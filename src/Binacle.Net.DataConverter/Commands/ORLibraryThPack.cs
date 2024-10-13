@@ -87,7 +87,7 @@ internal class ORLibraryThPackCommand
             {
                 Name = $"OrLibrary_{name}_{firstLineParts[0]}",
                 Bin = $"Raw::{containerParts[0]}x{containerParts[1]}x{containerParts[2]}",
-                Result = $"PackingEfficiency",
+                Result = $"PackingEfficiency::_",
                 Items = items.ToArray()
             };
 
