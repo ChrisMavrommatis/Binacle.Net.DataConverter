@@ -60,7 +60,7 @@ internal class ORLibraryThPackCommand
             int boxTypeCount = Convert.ToInt32(reader.ReadLine()!.Trim());
 
             var items = new List<string>();
-            var totalItemsVolume = 0;
+            long totalItemsVolume = 0;
             for (int i = 0; i < boxTypeCount; i++)
             {
                 // Each line for a box type is
@@ -78,7 +78,7 @@ internal class ORLibraryThPackCommand
                 var width = itemArray[3];
                 var height = itemArray[5];
                 var quantity = itemArray[7];
-                var itemVolume = Convert.ToInt32(length) * Convert.ToInt32(width) * Convert.ToInt32(height) * Convert.ToInt32(quantity);
+                var itemVolume = Convert.ToInt64(length) * Convert.ToInt64(width) * Convert.ToInt64(height) * Convert.ToInt64(quantity);
                 totalItemsVolume += itemVolume;
                 items.Add($"{length}x{width}x{height}-{quantity}");
             }
@@ -91,7 +91,7 @@ internal class ORLibraryThPackCommand
                 Items = items.ToArray()
             };
 
-            var containerVolume = Convert.ToInt32(containerParts[0]) * Convert.ToInt32(containerParts[1]) * Convert.ToInt32(containerParts[2]);
+            var containerVolume = Convert.ToInt64(containerParts[0]) * Convert.ToInt64(containerParts[1]) * Convert.ToInt64(containerParts[2]);
             var percentage = (decimal)totalItemsVolume / (decimal)containerVolume;
             Console.WriteLine("Problem {0}: {1}/{2} = {3}", firstLineParts[0], totalItemsVolume, containerVolume, percentage);
 
